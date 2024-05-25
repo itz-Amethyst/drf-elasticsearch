@@ -1,2 +1,2 @@
-from .core import CoreModel
-from .user import User
+from core.models.core import CoreModel
+from core.models.user import User
