@@ -8,7 +8,7 @@ class Genre(CoreModel):
     description = models.TextField(blank=True, max_length=255, null=True)
 
     class Meta:
-        verbose_name_plural = "Genras"
+        verbose_name_plural = "Genres"
 
 
     def __str__(self) -> str:
