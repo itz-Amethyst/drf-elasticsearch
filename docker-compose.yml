@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  db:
+    container_name: db
+    image: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASS}
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${DATABASE_USER}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: .
+    container_name: backend
+    command: >
+      sh -c "python3 manage.py makemigrations --noinput &&
+             python3 manage.py migrate --noinput &&
+             gunicorn --bind 0.0.0.0:8000 core.wsgi:application"
+    volumes:
+      - .:/app
+    expose:
+      - "8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+
+volumes:
+  postgres_data:
