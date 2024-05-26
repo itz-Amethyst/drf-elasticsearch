@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "django_elasticsearch_dsl",
+    "drf_spectacular",
 
     "core",
     "song",
@@ -90,8 +92,24 @@ DATABASES = {
 }
 
 REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
-    "PAGE_SIZE": 25
+    "PAGE_SIZE": 25,
+}
+# Elastic setup
+ELASTICSEARCH_DSL = {
+    "default": {
+        "hosts": "http://localhost:9200",  # Update to match your Docker setup
+        # "http_auth": ("elastic", config('ELASTIC_PASSWORD')),  # Uncomment if authentication is required
+        # "ca_certs": config('ELASTIC_CA_CERTS'),  # Uncomment if using SSL certificates
+    }
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'ElasticSearch API',
+    'DESCRIPTION': 'This is a ElasticSearch official API documentation.',
+    'VERSION': '1.0.0',
+    # 'SERVE_INCLUDE_SCHEMA': False
 }
 
 # Password validation
