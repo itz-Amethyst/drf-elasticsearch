@@ -17,6 +17,24 @@ services:
       timeout: 5s
       retries: 5
 
+  elasticsearch:
+    image: elasticsearch:7.6.2
+    # restart: always
+    ports:
+      - 9200:9200
+    environment:
+      - node.name=drf-elastic-search
+      - cluster.name=elastic-search
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+
   backend:
     build: .
     container_name: backend
@@ -34,3 +52,4 @@ services:
 
 volumes:
   postgres_data:
+  elasticsearch-data:
